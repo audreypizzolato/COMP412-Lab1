@@ -55,7 +55,10 @@ public class Main{
         else if(sFlag == true){
             flag = 3;
         }
-        
+        if(totalFlag>1){
+            System.err.println("COMP 412, Fall 2023 Lab 1 \nCommand Syntax:\n\t./412fe [flags] filename\n\nRequired arguments:\n\tfilename is the pathname (absolute or relative) to the input file\n\nOptional flags:\n\t-h       prints this message\n\nAt most one of the following three flags:\n\t-s       prints tokens in token stream\n\t-p       invokes parser and reports on success or failure\n\t-r       prints human readable version of parser's IR\nIf none is specified, the default action is '-p'.");
+
+        }
         if(flag>=1){
             Scanner scan = new Scanner(flag);
             File f = new File(args[file]);
@@ -68,13 +71,20 @@ public class Main{
 
             if(flag==1 || flag==2){
                 //System.out.println("parsing");
-                long startParse = System.nanoTime();
+                //long startParse = System.nanoTime();
                 success = scan.parser();
-                long endParse = System.nanoTime() - startParse;
-                System.out.println("Parse Time: " + endParse);
+                //long endParse = System.nanoTime() - startParse;
+                //System.out.println("Parse Time: " + endParse);
+                if(flag == 1 && success){
+                    scan.currentIR = scan.head;
+                    while(scan.currentIR != null){
+                        System.out.println(scan.currentIR.toString());
+                        scan.currentIR = scan.currentIR.getNext();
+                    }
+                }
 
                 if(flag==2 && success){
-                    System.out.println("Parse Succeeded in finding " + "ILOC expressions");
+                    System.out.println("Parse Succeeded in finding " + scan.correctLinesIR + "ILOC expressions");
                 }
             }
 
